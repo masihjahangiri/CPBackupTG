@@ -1,0 +1,7 @@
+*.log
+*.bak
+*.tar.gz
+*.zip
+*.sql
+# Ignore environment variables
+.env

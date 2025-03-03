@@ -1,58 +1,54 @@
-# CyberPanel Backup to Telegram
+# CyberPanel Telegram Backup Manager
 
-This script automates sending daily CyberPanel backups to a Telegram group.
+Welcome to the **CyberPanel Telegram Backup Manager** repository. This project provides a robust solution for managing CyberPanel backups and sending them to a specified Telegram chat. The script, named `cybertel`, offers a user-friendly interface and flexible configuration options to ensure seamless backup management.
 
 ## Features
-- Uses CyberPanel's built-in backup system.
-- Automatically finds and sends the latest backup file to Telegram.
-- Can be scheduled with a cron job for daily automation.
-- Deletes old backups after a specified time.
 
-## Prerequisites
-- A CyberPanel server with WordPress installed.
-- A Telegram bot (created via @BotFather).
-- Your Telegram group chat ID.
+- **User-Friendly Interface**: Offers both an interactive menu system and command-line options for ease of use.
+- **Customizable Scheduling**: Supports multiple backup intervals (hourly, every 6 hours, daily, every 3 days, weekly) using systemd timers.
+- **Robust Error Handling**: Includes comprehensive error checking and colorized output for enhanced user experience.
+- **Secure Configuration**: Allows direct credential input during setup with secure storage.
+- **Easy Installation**: Installable via a single command from a GitHub repository.
+- **Descriptive Command Name**: The script uses "cybertel" as its command, clearly indicating its purpose.
 
 ## Installation
 
-### 1. Clone the Repository
+To install the CyberPanel Telegram Backup Manager, run the following command:
+
 ```bash
-git clone https://github.com/yourusername/cyberpanel-backup-telegram.git
-cd cyberpanel-backup-telegram
+curl -s https://raw.githubusercontent.com/masihjahangiri/cyberpanel-backup-telegram/main/install.sh | bash
 ```
 
-### 2. Configure the Script
-Edit the script with your details:
-```bash
-nano cyberpanel_backup_telegram.sh
-```
-Update the following:
-- `TELEGRAM_BOT_TOKEN` → Your bot's API token.
-- `TELEGRAM_CHAT_ID` → Your Telegram group ID (with `-100` prefix).
-- `BACKUP_DIR` → The CyberPanel backup directory (default: `/home/backup/`).
+## Usage
 
-### 3. Make the Script Executable
-```bash
-chmod +x cyberpanel_backup_telegram.sh
-```
+After installation, you can use the `cybertel` command to manage your backups:
 
-### 4. Schedule the Script with Cron Job
-```bash
-crontab -e
-```
-Add the following line to run the script daily at 12:30 AM:
-```bash
-30 0 * * * /path/to/cyberpanel_backup_telegram.sh >/dev/null 2>&1
-```
+- **Configure the Script**: `cybertel --configure`
+- **Send Latest Backup**: `cybertel --send-backup`
+- **Check Service Status**: `cybertel --status`
+- **Uninstall the Script**: `cybertel --uninstall`
+- **Help**: `cybertel --help`
 
-### 5. Get Your Telegram Group ID
-1. Add your bot to the group.
-2. Use this command to get the group ID:
-```bash
-curl https://api.telegram.org/bot<your_bot_token>/getUpdates
-```
-3. Look for `chat.id` in the response and use it in the script.
+## Configuration
+
+During the configuration process, you will be prompted to enter your Telegram Bot Token and Chat ID. The script will test the connection to ensure everything is set up correctly. You can also configure backup settings such as the backup directory, retention period, and notification preferences.
+
+## Systemd Integration
+
+The script integrates with systemd to manage backup schedules. It creates a service and a timer to automate the backup process based on your selected interval.
+
+## Logging
+
+All operations are logged to a file located at `/etc/cybertel/cybertel.log`. This includes information about backup operations, errors, and notifications.
+
+## Uninstallation
+
+To uninstall the script, use the `cybertel --uninstall` command. You will have the option to retain or remove configuration files and logs.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
 
 ## License
-This project is licensed under the MIT License.
 
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
