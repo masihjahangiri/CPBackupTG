@@ -16,7 +16,7 @@ Welcome to the **CyberPanel Telegram Backup Manager** repository. This project p
 To install the CyberPanel Telegram Backup Manager, run the following command:
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/masihjahangiri/cyberpanel-backup-telegram/main/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/masihjahangiri/CPBackupTG/main/install.sh)
 ```
 
 ## Usage
