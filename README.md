@@ -1,54 +1,62 @@
-# CyberPanel Telegram Backup Manager
+# CPBackupTG
 
-Welcome to the **CyberPanel Telegram Backup Manager** repository. This project provides a robust solution for managing CyberPanel backups and sending them to a specified Telegram chat. The script, named `cybertel`, offers a user-friendly interface and flexible configuration options to ensure seamless backup management.
+Automated backup manager for CyberPanel servers. Finds backup archives and delivers them directly to Telegram via the Bot API. One-liner install, systemd timer scheduling, and configurable retention.
 
-## Features
-
-- **User-Friendly Interface**: Offers both an interactive menu system and command-line options for ease of use.
-- **Customizable Scheduling**: Supports multiple backup intervals (hourly, every 6 hours, daily, every 3 days, weekly) using systemd timers.
-- **Robust Error Handling**: Includes comprehensive error checking and colorized output for enhanced user experience.
-- **Secure Configuration**: Allows direct credential input during setup with secure storage.
-- **Easy Installation**: Installable via a single command from a GitHub repository.
-- **Descriptive Command Name**: The script uses "cybertel" as its command, clearly indicating its purpose.
-
-## Installation
-
-To install the CyberPanel Telegram Backup Manager, run the following command:
+## Install
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/masihjahangiri/CPBackupTG/main/install.sh)
+curl -fsSL https://raw.githubusercontent.com/masihjahangiri/CPBackupTG/main/install.sh | sudo bash
 ```
+
+The installer walks you through configuration interactively: Telegram bot token, chat ID, backup directory, retention policy, and schedule interval.
 
 ## Usage
 
-After installation, you can use the `cybertel` command to manage your backups:
+After installation, use the `cybertel` command:
 
-- **Configure the Script**: `cybertel --configure`
-- **Send Latest Backup**: `cybertel --send-backup`
-- **Check Service Status**: `cybertel --status`
-- **Uninstall the Script**: `cybertel --uninstall`
-- **Help**: `cybertel --help`
+```bash
+cybertel --send-backup     # Send latest backup to Telegram now
+cybertel --status          # Show configuration and timer status
+cybertel --configure       # Reconfigure settings
+cybertel --uninstall       # Remove everything
+```
+
+## How It Works
+
+1. CyberPanel creates `.tar.gz` backup archives on its own schedule
+2. The systemd timer triggers `cybertel` at your configured interval
+3. `cybertel` finds new backup files in the configured directory
+4. Each backup is sent to your Telegram chat via the Bot API `sendDocument` endpoint
+5. Old backups beyond the retention period are cleaned up
+
+## Scheduling Options
+
+| Interval | Description |
+|---|---|
+| Hourly | Every hour |
+| Every 6 hours | 4 times per day |
+| Daily | Once per day |
+| Every 3 days | Twice per week |
+| Weekly | Once per week |
 
 ## Configuration
 
-During the configuration process, you will be prompted to enter your Telegram Bot Token and Chat ID. The script will test the connection to ensure everything is set up correctly. You can also configure backup settings such as the backup directory, retention period, and notification preferences.
+Configuration is stored at `/etc/cybertel/config.conf`. Logs are written to `/etc/cybertel/cybertel.log`.
 
-## Systemd Integration
+| Setting | Description |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | Bot token from [@BotFather](https://t.me/BotFather) |
+| `TELEGRAM_CHAT_ID` | Target chat or group ID |
+| `BACKUP_DIR` | CyberPanel backup directory path |
+| `BACKUP_RETENTION` | Number of days to keep backups |
+| `BACKUP_INTERVAL` | Systemd timer interval |
 
-The script integrates with systemd to manage backup schedules. It creates a service and a timer to automate the backup process based on your selected interval.
+## Prerequisites
 
-## Logging
-
-All operations are logged to a file located at `/etc/cybertel/cybertel.log`. This includes information about backup operations, errors, and notifications.
-
-## Uninstallation
-
-To uninstall the script, use the `cybertel --uninstall` command. You will have the option to retain or remove configuration files and logs.
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+- CyberPanel server with backup scheduling configured
+- Telegram bot token and chat ID
+- `curl` installed on the server
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+MIT
